@@ -1,0 +1,87 @@
+{
+  "name": "outbound call",
+  "nodes": [
+    {
+      "parameters": {
+        "formTitle": "contact us",
+        "formDescription": "enter details",
+        "formFields": {
+          "values": [
+            {
+              "fieldLabel": "name",
+              "placeholder": "enter your name"
+            },
+            {
+              "fieldLabel": "phone number",
+              "fieldType": "number",
+              "placeholder": "enter phone number"
+            }
+          ]
+        },
+        "options": {
+          "buttonLabel": "Get a call"
+        }
+      },
+      "type": "n8n-nodes-base.formTrigger",
+      "typeVersion": 2.3,
+      "position": [
+        0,
+        0
+      ],
+      "id": "b91d5ed1-8dca-47c6-89b8-2d2a54e44e79",
+      "name": "On form submission",
+      "webhookId": "c3f2a3f2-9a43-47c8-ad05-4ce8da89be2e"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.retellai.com/v2/create-phone-call",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "Bearer key_3cd0c66a6b71acb4b24893c63198"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"from_number\": \"9866548698\",\n  \"to_number\": \"\"{{ $json['phone number'] }},\n  \"override_agent_id\": \"agent_6edd252304a0af61388bf1a7a8\",\n  \"override_agent_version\": 1,\n  \"metadata\": {},\n  \"retell_llm_dynamic_variables\": {\n    \"customer_name\": \"{{ $json.name }}\"\n  },\n  \"custom_sip_headers\": {\n    \"X-Custom-Header\": \"Custom Value\"\n  },\n  \"ignore_e164_validation\": true\n} ",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.3,
+      "position": [
+        416,
+        0
+      ],
+      "id": "daf4b4b0-5f19-487c-9b66-3cbc3def213f",
+      "name": "HTTP Request1"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "On form submission": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "7a4a15a2-16e6-4adb-bc42-8ebc676e620b",
+  "meta": {
+    "instanceId": "4da39247ae932b64e314bc7394dae8dd7bda9c14f022483695b66b6f5c0fad5c"
+  },
+  "id": "gI8uHYd0RLRkysWL",
+  "tags": []
+}
